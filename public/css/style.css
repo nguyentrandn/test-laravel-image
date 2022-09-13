@@ -1,12 +1,23 @@
 .img-group {
+    padding: 10px;
+    border: 2px solid #CCCCCC;
+    width: 100%;
+    margin: 0 auto;
+    /* min-height: 470px;
+    max-height: 500px; */
+    height: 700px;
+    overflow-y: scroll;
     display: flex;
-    flex-direction: row;
+    flex-flow: column wrap; /* Shorthand – you could use ‘flex-direction: column’ and ‘flex-wrap: wrap’ instead */
+    justify-content: flex-start;
+    align-items: flex-start;
+  box-sizing: border-box;
 }
 
 .img-item {
     position: relative;
-    min-width: 150px;
-    max-width: 500px;
+    width: 14%;
+    margin: 1%;
 }
 
 .btn-close {
@@ -14,4 +25,6 @@
     top: 0;
     right: 0;
     opacity: 0.5;
+    background-color: white;
+    margin: 2%;
 }

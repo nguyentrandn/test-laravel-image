@@ -6,6 +6,7 @@ use App\Models\Image;
 use Illuminate\Http\Request;
 use Spatie\FlareClient\View;
 use Termwind\Components\Dd;
+use Illuminate\Support\Facades\File; 
 
 class ImageController extends Controller
 {
@@ -39,5 +40,12 @@ class ImageController extends Controller
         return back()
             ->with('success', 'You have successfully uploaded your image.')
             ->with('image', $filename);
+    }
+
+    // delete
+    public function delete(Request $request){
+        Image::where('id', $request->id)->delete();
+        File::delete('images/' .$request->name);
+        
     }
 }
