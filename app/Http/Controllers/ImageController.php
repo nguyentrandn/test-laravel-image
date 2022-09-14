@@ -24,10 +24,11 @@ class ImageController extends Controller
     }
 
     public function store(Request $request){
+        // dd($request->all());
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,gif,jpg,svg,ico',
         ]);
-        // Get FileName
+        // GetFileName
         $filename = time().'.'.$request->image->extension();  
         // move file to Public/images folder
         $request->file('image')->move(public_path('images'), $filename);
@@ -47,5 +48,27 @@ class ImageController extends Controller
         Image::where('id', $request->id)->delete();
         File::delete('images/' .$request->name);
         
+    }
+    // get Img by ID
+    public function getImgById(Request $request){ 
+        $img = Image::where('id', $request->id)->get();
+        return $img;
+    }
+    // Update Image
+    public function update(Request $request){
+        $request->validate([
+            'image_update' => 'required|image|mimes:jpeg,png,gif,jpg,svg,ico',
+        ]);
+        $filename = time().'.'.$request->image_update->extension();  
+        $request->file('image_update')->move(public_path('images'), $filename);
+        // tim img cu 
+        $getImg = Image::find($request->id);
+            // Xoa file trong Public trc khi cap nhat tren database
+        File::delete('images/' .$getImg->name);
+        $getImg -> name = $filename;
+        $getImg -> file_path = $filename;
+        $getImg-> save();
+
+        return back();
     }
 }

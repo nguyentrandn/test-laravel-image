@@ -24,5 +24,6 @@ Route::controller(ImageController::class)->group(function(){
     Route::post('image-upload', 'store')->name('image.store');
 
 });
-// Route::delete('delete',[ImageController::class, 'delele'])->name('delele');
 Route::post('delete', [ImageController::class, 'delete'])->name('delete');
+Route::post('update', [ImageController::class, 'update'])->name('update');
+Route::get('getImgById/{id}', [ImageController::class, 'getImgById'])->name('getImgById');

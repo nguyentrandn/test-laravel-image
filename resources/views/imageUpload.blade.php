@@ -5,11 +5,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- fontawesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
     <!-- Jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    {{-- bootstrap --}}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 </head>
       
 <body>
@@ -54,13 +58,59 @@
         </form>
         <div class="img-group">
             @foreach ($imgs as $img)
-            
             <div class="img-item" id="img-{{$img->id}}">
                 <img src="{{asset('images/'.$img->name)}}" alt="{{$img->name}}" style="width: 150px">
-                <button onclick="handlerDelete({{$img->id}},'{{$img->name}}')" class="btn-close"><i class="fa-solid fa-xmark-lagred"></i></button>
+                <div class="btn-control">
+                    <label><i class="fa-solid fa-ellipsis-vertical"></i></label>
+                    <div class="btn-group">
+                        <div class="btn-item">
+                            <div class="btn-edited" id="update-btn" data-id="{{ $img->id }}" data-bs-toggle="modal" data-bs-target="#myModal">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </div>
+                            <div onclick="handlerDelete({{$img->id}},'{{$img->name}}')" class="btn-closer"><i class="fa-solid fa-x"></i></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
             @endforeach
+        </div>
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Modal Update</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{url('update')}}" method="POST" enctype="multipart/form-data"
+                     {{-- onsubmit="return(false)" --}}
+                     >
+                        @csrf
+                        <div class="mb-3">
+                            <div class="img-review">
+                               
+                            </div>
+                            <input 
+                                type="file" 
+                                name="image_update" 
+                                id="inputImage-update"
+                                class="form-control @error('image') is-invalid @enderror"
+                                {{-- multiple --}}
+                            >
+                            @error('image')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                            
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="submit" id="update" class="btn btn-primary" >Save</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                  </div>
+            </div>
+            </div>
         </div>
       </div>
     </div>
@@ -68,28 +118,61 @@
 <!-- Jquery -->
 <!-- <script src="js/js.js"></script> -->
 
-<script type="text/javascript">
-    function handlerDelete(id, name) {
-    if (window.confirm('Are you sure you want to delete')) {
-        $.ajax({
-        type: "POST",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        url: "{{ route('delete') }}",
-        data: {
-            "_token": "{{ csrf_token() }}",
-            "id": id,
-            "name": name
-        },
-        dataType: 'json',
-        complete: function(){
-            $("#img-" + id).remove();
-        }
-    })
+<script  type="text/javascript" >
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
+});
+    function handlerDelete(id, name) {
+        if (window.confirm('Are you sure you want to delete')) {
+            $.ajax({
+                type: "POST",
+                url: "{{route('delete')}}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "id": id,
+                    "name": name
+                },
+                dataType: 'json',
+                complete: function() {
+                    $("#img-" + id).remove();
+                }
+            })
+        }
+    }
+    $( document ).ready(function() {
+        $('body').on('click','#update-btn', function() {
+            // get id from data-id attribute
+            var id = $(this).data('id');
+            $.get("{{url('getImgById')}}"+ "/" + id, function (data) {
+                let img = data[0];
+                // truyen id qua ben controller
+                $('.img-review').replaceWith(`
+                    <div class="img-review">
+                        <input type="hidden" name="id" value="${img.id}" />
+                        <label class="form-label" for="inputImage-update">Image Old:</label>
+                        <div id="image-update-preview"></div>
+                        <img name="img-name" data-id="${img.id}" src="images/${img.file_path}" alt="" srcset="" width="150px" id="image-update-preview">
+                        <label class="form-label" for="inputImage-update">Image New:</label>
+                        <img name="img-name" id="preview-image" src="" alt="" srcset="" width="150px" id="image-update-preview">
+                    </div>
+                `);
+            })
+        })
+        $("#inputImage-update").change((e) => {
+            // console.log(e.target.files[0]);
+            var file = e.target.files[0];
+            if(file){
+            var reader = new FileReader();
+            reader.onload = function(e){
+                $("#preview-image").attr("src", e.target.result);
+            }
+            reader.readAsDataURL(file);
+        }
+        })
+    });
 
-}
 </script>
 </body>
 </html>
