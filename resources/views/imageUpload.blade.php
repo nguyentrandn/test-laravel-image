@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Laravel 9 Image Upload Example - ItSolutionStuff.com</title>
+    <title>Laravel 9 Image Upload Example</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- fontawesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
@@ -12,6 +12,7 @@
     {{-- bootstrap --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <link rel="stylesheet" href="css/style.css">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 </head>
@@ -22,7 +23,7 @@
     <div class="panel panel-primary">
   
       <div class="panel-heading">
-        <h2>Laravel 9 Image Upload Example - ItSolutionStuff.com</h2>
+        <h2>Laravel 9 Image Upload Example</h2>
       </div>
  
       <div class="panel-body">
@@ -82,21 +83,19 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{url('update')}}" method="POST" enctype="multipart/form-data"
-                     {{-- onsubmit="return(false)" --}}
-                     >
+                    <form action="{{url('update')}}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <div class="mb-3">
+                        <div class="mb-3 box-preview">
                             <div class="img-review">
-                               
                             </div>
+                            <label for="inputImage-update" class="preview-input"><i class="fa-solid fa-plus"></i></label>
                             <input 
                                 type="file" 
                                 name="image_update" 
                                 id="inputImage-update"
                                 class="form-control @error('image') is-invalid @enderror"
-                                {{-- multiple --}}
-                            >
+                                hidden
+                                >
                             @error('image')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -119,11 +118,11 @@
 <!-- <script src="js/js.js"></script> -->
 
 <script  type="text/javascript" >
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
     function handlerDelete(id, name) {
         if (window.confirm('Are you sure you want to delete')) {
             $.ajax({
@@ -141,6 +140,20 @@ $.ajaxSetup({
             })
         }
     }
+    // 
+    function preview(input) {
+            console.log($("#inputImage-update").get(0).files[0]);
+            var file = $("#inputImage-update").get(0).files[0];
+            if(file){
+            var reader = new FileReader();
+            reader.onload = function(e){
+                $(".preview-image").attr({"src": e.target.result, "width": "150px"}).fadeIn();
+                $(".preview-input").attr("style", "height: fit-content");
+                $(".fa-plus").remove();
+            }
+            reader.readAsDataURL(file);
+            }
+    }
     $( document ).ready(function() {
         $('body').on('click','#update-btn', function() {
             // get id from data-id attribute
@@ -148,30 +161,29 @@ $.ajaxSetup({
             $.get("{{url('getImgById')}}"+ "/" + id, function (data) {
                 let img = data[0];
                 // truyen id qua ben controller
-                $('.img-review').replaceWith(`
-                    <div class="img-review">
-                        <input type="hidden" name="id" value="${img.id}" />
-                        <label class="form-label" for="inputImage-update">Image Old:</label>
-                        <div id="image-update-preview"></div>
-                        <img name="img-name" data-id="${img.id}" src="images/${img.file_path}" alt="" srcset="" width="150px" id="image-update-preview">
-                        <label class="form-label" for="inputImage-update">Image New:</label>
-                        <img name="img-name" id="preview-image" src="" alt="" srcset="" width="150px" id="image-update-preview">
+                $('.box-preview').replaceWith(`
+                    <input type="hidden" name="id" value="${img.id}" />
+                    <div class="mb-3 box-preview">
+                        <div class="img-review">
+                            <img name="img-name" data-id="${img.id}" src="images/${img.file_path}" alt="" srcset="" width="150px" id="image-update-preview">
+                        </div>
+                        <div class="line"></div>
+                        <label for="inputImage-update" class="preview-input"><img src="" class="preview-image"><i class="fa-solid fa-plus "></i></img></label>
+                        <input 
+                            type="file" 
+                            name="image_update" 
+                            id="inputImage-update"
+                            class="form-control @error('image') is-invalid @enderror"
+                            hidden
+                            onchange="preview(this)"
+                        >
                     </div>
                 `);
             })
         })
-        $("#inputImage-update").change((e) => {
-            // console.log(e.target.files[0]);
-            var file = e.target.files[0];
-            if(file){
-            var reader = new FileReader();
-            reader.onload = function(e){
-                $("#preview-image").attr("src", e.target.result);
-            }
-            reader.readAsDataURL(file);
-        }
-        })
     });
+        
+ 
 
 </script>
 </body>
