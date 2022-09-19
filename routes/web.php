@@ -18,10 +18,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';
 Route::controller(ImageController::class)->group(function(){
-    Route::get('image-upload', 'index');
-    Route::get('image-upload', 'getImg');
-    Route::post('image-upload', 'store')->name('image.store');
+    Route::get('image', 'index');
+    Route::get('image', 'getImg');
+    Route::post('image', 'store')->name('image.store');
 
 });
 Route::post('delete', [ImageController::class, 'delete'])->name('delete');

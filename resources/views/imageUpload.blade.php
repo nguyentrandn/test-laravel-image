@@ -167,7 +167,7 @@
                         <div class="img-review">
                             <img name="img-name" data-id="${img.id}" src="images/${img.file_path}" alt="" srcset="" width="150px" id="image-update-preview">
                         </div>
-                        <div class="line"></div>
+                        <div class="line"><i class="fa-solid fa-wave-square"></i></div>
                         <label for="inputImage-update" class="preview-input"><img src="" class="preview-image"><i class="fa-solid fa-plus "></i></img></label>
                         <input 
                             type="file" 
