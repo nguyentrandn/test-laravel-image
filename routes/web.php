@@ -18,17 +18,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+// Authenticate 
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';
+
 Route::controller(ImageController::class)->group(function(){
     Route::get('image', 'index');
-    Route::get('image', 'getImg');
+    Route::get('image', 'getImg')->name('image');
     Route::post('image', 'store')->name('image.store');
 
 });
-Route::post('delete', [ImageController::class, 'delete'])->name('delete');
-Route::post('update', [ImageController::class, 'update'])->name('update');
+Route::post('delete', [ImageController::class, 'delete'])->middleware('auth')->name('delete');
+Route::post('update', [ImageController::class, 'update'])->middleware('auth')->name('update');
 Route::get('getImgById/{id}', [ImageController::class, 'getImgById'])->name('getImgById');

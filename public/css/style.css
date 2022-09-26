@@ -1,3 +1,11 @@
+html body {
+    height: 200vh;
+}
+
+a {
+    color: black;
+}
+
 .img-group {
     padding: 10px;
     border: 2px solid #CCCCCC;
@@ -5,7 +13,7 @@
     margin: 0 auto;
     min-height: 470px;
     max-height: 700px;
-    overflow-y: scroll;
+    overflow-x: scroll;
     display: flex;
     flex-flow: column wrap;
     /* Shorthand – you could use ‘flex-direction: column’ and ‘flex-wrap: wrap’ instead */
@@ -14,9 +22,38 @@
     box-sizing: border-box;
 }
 
+
+/* width */
+
+.img-group::-webkit-scrollbar {
+    height: 5px;
+    background: #f1f1f1;
+}
+
+
+/*  */
+
+.img-group::-webkit-scrollbar-track {
+    background-color: white;
+}
+
+
+/* thanh keo */
+
+.img-group::-webkit-scrollbar-thumb {
+    background: lightgrey;
+    border-radius: 60px;
+}
+
+
+/* Handle on hover */
+
+.img-group::-webkit-scrollbar-thumb:hover {
+    background: lightcyan;
+}
+
 .img-item {
     position: relative;
-    width: 16%;
     margin: 1%;
     transition: all 0.3s;
 }
@@ -25,12 +62,24 @@
     width: 100%;
     border-radius: 5%;
     transition: all 0.3s;
+    cursor: zoom-in;
+}
+
+.img-modal-preview {
+    /* width: 100%; */
+    max-height: 90vh;
+}
+
+.modal-dialog {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .btn-control {
     position: absolute;
     top: 3%;
-    right: 0;
+    right: 3%;
     padding-bottom: 20px;
 }
 
@@ -89,6 +138,26 @@
 .btn-item .btn-closer:hover {
     color: red;
 }
+
+.btn-download {
+    position: absolute;
+    top: 3%;
+    left: 3%;
+}
+
+.btn-download i {
+    color: white;
+    opacity: 0.5;
+    transition: opacity 0.5s 0.05s ease;
+}
+
+.btn-download i:hover {
+    opacity: 1;
+    transition: opacity 0.5s 0.05s ease;
+}
+
+
+/* ------------------- */
 
 .img-review {
     width: 100%;
