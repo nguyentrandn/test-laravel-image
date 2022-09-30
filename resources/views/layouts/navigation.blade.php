@@ -13,11 +13,26 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('image')" :active="request()->routeIs('image')">
-                        {{ __('Dashboard') }}
+                        {{ __('message.dashboard') }}
                     </x-nav-link>
                 </div>
             </div>
+            <div class="col">
+                <div class="col-md-2" style="margin-left: auto; margin-top: 2%">
+                    <select class="form-control changeLang">
+                        <option value="en" {{ session()->get('locale') == 'en' ? 'selected' : '' }}>English</option>
+                        <option value="vi" {{ session()->get('locale') == 'vi' ? 'selected' : '' }}>Viet Nam</option>
+                    </select>
+                </div>
+                {{-- {{  dd(session()->get('locale'))}} --}}
+            </div>
+            <div class="cart col-md-2" id="cart">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <div class="cart-drop">
 
+                </div>
+            </div>
+            <div class="layer"></div>
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <?php if(Auth::check()) :?>
@@ -39,8 +54,8 @@
                             @csrf
                             <x-dropdown-link :href="route('logout')"
                             onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                this.closest('form').submit();">
+                                {{ __('message.logout') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -67,8 +82,8 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            {{-- <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+            {{-- <x-responsive-nav-link :href="route('message.dashboard')" :active="request()->routeIs('message.dashboard')">
+                {{ __('message.dashboard') }}
             </x-responsive-nav-link> --}}
         </div>
 
@@ -86,7 +101,7 @@
                         <x-responsive-nav-link :href="route('logout')"
                         onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                        {{ __('message.logout') }}
                         </x-responsive-nav-link>
                     </form>
                 </div>

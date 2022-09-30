@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\LangController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,3 +35,9 @@ Route::controller(ImageController::class)->group(function(){
 Route::post('delete', [ImageController::class, 'delete'])->middleware('auth')->name('delete');
 Route::post('update', [ImageController::class, 'update'])->middleware('auth')->name('update');
 Route::get('getImgById/{id}', [ImageController::class, 'getImgById'])->name('getImgById');
+
+// Lang
+Route::get('lang/change', [LangController::class, 'change'])->name('changeLang');
+
+// Cart
+Route::get('cart', [CartController::class, 'cartList'])->name('cartList');

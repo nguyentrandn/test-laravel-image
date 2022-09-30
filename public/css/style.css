@@ -218,3 +218,53 @@ a {
     color: lightsteelblue;
     text-align: center;
 }
+
+.cart {
+    width: 50px;
+    height: 50px;
+    border: 1px solid lightgrey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10%;
+    margin: 1%;
+    position: relative;
+}
+
+
+/* .cart:hover {
+    cursor: pointer;
+    background-color: lightgrey;
+} */
+
+.cart-drop {
+    position: absolute;
+    width: 300px;
+    min-height: 300px;
+    max-height: 500px;
+    overflow-y: scroll;
+    background-color: lightblue;
+    top: 100%;
+    z-index: 4;
+    display: none;
+}
+
+.active-cart {
+    display: block;
+}
+
+.layer {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: #CCCCCC;
+    z-index: 1;
+    opacity: 0.5;
+}
+
+.active-layer {
+    display: block;
+}

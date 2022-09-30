@@ -128,6 +128,14 @@
 <!-- <script src="js/js.js"></script> -->
 
 <script  type="text/javascript" >
+    // lang
+    var url = "{{ route('changeLang') }}";
+  
+    $(".changeLang").change(function(){
+        window.location.href = url + "?lang="+ $(this).val();
+    });
+
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -203,5 +211,6 @@
         })
     });
 </script>
+<script src="/js/handle.js"></script>
 </body>
 </html>
